@@ -1,0 +1,67 @@
+<!-- src/app/dashboard/dashboard.component.html -->
+<div class="dashboard-container p-4">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold">Dashboard</h1>
+      <p class="text-gray-600">Welcome to your content management dashboard</p>
+    </div>
+  
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <mat-card *ngFor="let stat of stats" class="stat-card">
+        <mat-card-content>
+          <div class="flex justify-between items-center mb-4">
+            <mat-icon [class.text-primary]="true">{{stat.icon}}</mat-icon>
+            <mat-icon [class.text-green-500]="stat.trend === 'up'" 
+                      [class.text-red-500]="stat.trend === 'down'">
+              {{stat.trend === 'up' ? 'trending_up' : 'trending_down'}}
+            </mat-icon>
+          </div>
+          <div>
+            <p class="text-gray-600">{{stat.name}}</p>
+            <h2 class="text-2xl font-bold">{{stat.value}}</h2>
+            <p class="text-sm text-gray-500">{{stat.change}}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  
+    <!-- Chart -->
+    <mat-card class="mb-6">
+      <mat-card-header>
+        <mat-card-title>Content Views - Past Week</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ngx-charts-bar-vertical
+          [results]="contentViews"
+          [xAxis]="true"
+          [yAxis]="true"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Day'"
+          [yAxisLabel]="'Views'"
+          [scheme]="'cool'">
+        </ngx-charts-bar-vertical>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Recent Activity -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Recent Activity</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item style="height:auto" *ngFor="let activity of recentActivities">
+            <mat-icon [ngClass]="{
+              'text-green-500': activity.status === 'success',
+              'text-blue-500': activity.status === 'info',
+              'text-yellow-500': activity.status === 'warning'
+            }" matListIcon>fiber_manual_record</mat-icon>
+            <div matLine>{{activity.action}}: "{{activity.title}}"</div>
+            <div matLine class="text-gray-500">{{activity.time}} by {{activity.author}}</div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

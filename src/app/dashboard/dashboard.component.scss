@@ -1,0 +1,22 @@
+// src/app/dashboard/dashboard.component.scss
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .stat-card {
+    height: 100%;
+    
+    mat-card-content {
+      padding: 1rem;
+    }
+  }
+  
+  ngx-charts-bar-vertical {
+    height: 300px;
+  }
+  
+  mat-list-item {
+    margin-bottom: 1rem;
+  }
+  
