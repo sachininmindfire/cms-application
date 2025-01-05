@@ -15,7 +15,7 @@
                         <p class="text-sm text-gray-500">New {{item.name}}{{item.newAddedThisWeek > 1 ? 's': ''}} added this week: {{item.newAddedThisWeek}}</p>
                     </div>
                     <div class="flex justify-between mt-4">                      
-                        <button mat-button color="primary">Add {{item.name}}</button>
+                        <button mat-button color="primary" [routerLink]="['/content/'+ item.name.toLocaleLowerCase()]">Add {{item.name}}</button>
                         <button mat-button color="primary">Show all {{item.name}}s</button>
                     </div>
                 </mat-card-content>               
@@ -25,7 +25,7 @@
                 <mat-card *ngFor="let article of articles" class="mb-2">
                     <mat-card-content>
                         <div class="flex justify-between items-center">
-                            <div class="text-sm"><a class="underline" routerLink="/content/article/{{article.id}}">{{article.title}}</a></div>
+                            <div class="text-sm"><a class="underline" [routerLink]="['/content/article', article.id]">{{article.title}}</a></div>
                             <div class="text-sm font-bold">{{article.views}}</div>
                         </div>
                     </mat-card-content>
@@ -33,33 +33,33 @@
             </div>
             <div class="">
                 <div class="mb-2 text-left">Top 10 Tips</div>
-                <mat-card *ngFor="let article of articles" class="mb-2">
+                <mat-card *ngFor="let tip of tips" class="mb-2">
                     <mat-card-content>
                         <div class="flex justify-between items-center">
-                            <div class="text-sm"><a class="underline" href="#">{{article.title}}</a></div>
-                            <div class="text-sm font-bold">{{article.views}}</div>
+                            <div class="text-sm"><a class="underline" [routerLink]="['/content/tip', tip.id]">{{tip.title}}</a></div>
+                            <div class="text-sm font-bold">{{tip.views}}</div>
                         </div>
                     </mat-card-content>
                 </mat-card>
             </div>
             <div class="">
                 <div class="mb-2 text-left">Top 10 Terms</div>
-                <mat-card *ngFor="let article of articles" class="mb-2">
+                <mat-card *ngFor="let term of terms" class="mb-2">
                     <mat-card-content>
                         <div class="flex justify-between items-center">
-                            <div class="text-sm"><a class="underline" href="#">{{article.title}}</a></div>
-                            <div class="text-sm font-bold">{{article.views}}</div>
+                            <div class="text-sm"><a class="underline"  [routerLink]="['/content/term', term.id]">{{term.title}}</a></div>
+                            <div class="text-sm font-bold">{{term.views}}</div>
                         </div>
                     </mat-card-content>
                 </mat-card>
             </div>
             <div class="">
                 <div class="mb-2 text-left">Top 10 Tags</div>
-                <mat-card *ngFor="let article of articles" class="mb-2">
+                <mat-card *ngFor="let tag of tags" class="mb-2">
                     <mat-card-content>
                         <div class="flex justify-between items-center">
-                            <div class="text-sm"><a class="underline" href="#">{{article.title}}</a></div>
-                            <div class="text-sm font-bold">{{article.views}}</div>
+                            <div class="text-sm"><a class="underline"  [routerLink]="['/content/tag', tag.id]">{{tag.title}}</a></div>
+                            <div class="text-sm font-bold">{{tag.views}}</div>
                         </div>
                     </mat-card-content>
                 </mat-card>

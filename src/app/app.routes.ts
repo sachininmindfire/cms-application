@@ -17,14 +17,34 @@ export const routes: Routes = [
           import('./dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
       {
+        path: 'content/article',
+        loadComponent: () => 
+          import('./content/article/article.component').then(m => m.ArticleComponent)
+      },
+      {
+        path: 'content/article/:id',
+        loadComponent: () => 
+          import('./content/article/article.component').then(m => m.ArticleComponent)
+      },
+      {
+        path: 'content/tip/:id',
+        loadComponent: () => 
+          import('./content/tip/tip.component').then(m => m.TipComponent)
+      },
+      {
+        path: 'content/term/:id',
+        loadComponent: () => 
+          import('./content/term/term.component').then(m => m.TermComponent)
+      },
+      {
+        path: 'content/tag/:id',
+        loadComponent: () => 
+          import('./content/tag/tag.component').then(m => m.TagComponent)
+      },
+      {
         path: 'content',
         loadComponent: () => 
           import('./content/content.component').then(m => m.ContentComponent)
-      },
-      {
-        path: 'content/article/{id}',
-        loadComponent: () => 
-          import('./content/article/article.component').then(m => m.ArticleComponent)
       },
       {
         path: 'settings',
