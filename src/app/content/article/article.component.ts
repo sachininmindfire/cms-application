@@ -26,6 +26,8 @@ export class ArticleComponent {
   article: Article = { id: 0, title: '', description: '', author: '', date: new Date(), views: 0, likes: 0, comments: [] };
   submitAction: string = 'Save';
   articleFormGroup;
+  protected readonly titleSignal = signal('');
+  protected readonly descriptionSignal = signal('');
   
   constructor(private route: ActivatedRoute, private contentServiceService: ContentServiceService, private router: Router, private fb: FormBuilder) {
     this.route.params.subscribe(params => {
@@ -58,13 +60,16 @@ export class ArticleComponent {
     this.article = this.contentServiceService.getArticles(this.articleId);    
     this.articleFormGroup.patchValue(this.article);
     this.articleFormGroup.markAsPristine();
-    this.value.set(this.article.title);
-  }
-
-  protected readonly value = signal('');
+    this.titleSignal.set(this.article.title);
+    this.descriptionSignal.set(this.article.description);
+  }  
 
   protected onInput(event: Event) {
-    this.value.set((event.target as HTMLInputElement).value);
+    this.titleSignal.set((event.target as HTMLInputElement).value);
+  }
+
+  protected onDescriptionChange(event: string) {
+    this.descriptionSignal.set(event);
   }
   
   onSubmit() {

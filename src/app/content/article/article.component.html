@@ -10,7 +10,7 @@
             <mat-form-field intLabel="Max 100 characters" class="w-full">
                 <mat-label>Article name</mat-label>
                 <input matInput type="text"  maxlength="100" formControlName="title" placeholder="Ex. AI evolution in 2024 " (input)="onInput($event)" />
-                <mat-hint align="end">{{value().length}}/100</mat-hint>
+                <mat-hint align="end">{{titleSignal().length}}/100</mat-hint>
             </mat-form-field>
             </div>
             <div class="grid grid-cols-1 gap-4 grid-flow-row">
@@ -19,8 +19,8 @@
                     <!-- <mat-form-field class="w-full"> -->
                         <!-- <mat-label>Article description</mat-label> -->
                         <!-- <textarea matInput formControlName="description" placeholder="Ex. AI evolution in 2024"></textarea> -->
-                        <ngx-wig formControlName="description" placeholder="Ex. Description of AI evolution in 2024"></ngx-wig>
-                        <mat-hint align="end">{{value().length}}/100</mat-hint>
+                        <ngx-wig formControlName="description" placeholder="Ex. Description of AI evolution in 2024" (contentChange)="onDescriptionChange($event)"></ngx-wig>
+                        <mat-hint align="end">{{descriptionSignal().length}}/1500</mat-hint>
                     <!-- </mat-form-field> -->
                 </div>                
             <!-- <mat-form-field>

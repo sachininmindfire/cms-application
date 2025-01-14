@@ -16,7 +16,8 @@
     { "id":7, "title": "Tailwind CSS Min-Height", "description": "", "author": "Author 7", "date": "2021-01-07", "views": 700, "likes": 70, "comments": [] },
     { "id":8, "title": "How to Increase Height and Width of Date and Time Fields in Tailwind CSS?", "description": "", "author": "Author 8", "date": "2021-01-08", "views": 800, "likes": 80, "comments": [] },
     { "id":9, "title": "Article 9", "description": "", "author": "Author 9", "date": "2021-01-09", "views": 900, "likes": 90, "comments": [] },
-    { "id":10, "title": "Article 10", "description": "", "author": "Author 10", "date": "2021-01-10", "views": 1000, "likes": 100, "comments": [] }
+    { "id":10, "title": "Article 10", "description": "", "author": "Author 10", "date": "2021-01-10", "views": 1000, "likes": 100, "comments": [] },
+    { "id":11, "title": "Article 11", "description": "", "author": "Author 11", "date": "2021-01-10", "views": 800, "likes": 40, "comments": [] }
     ],
     "terms" : [
     { "id":1, "title": "HTML width/height Attribute vs CSS width/height Property", "author": "Author 1", "date": "2021-01-01", "views": 100, "likes": 10, "comments": 5 },

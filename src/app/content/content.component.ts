@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -18,7 +18,7 @@ export class ContentComponent {
   private http = inject(HttpClient);
 
   contentTypes = ContentSampleData.contentTypes;
-  articles: Article[] = []
+  articles = signal<Article[]>([]);
   terms = ContentSampleData.terms;
   tips = ContentSampleData.tips;
   tags = ContentSampleData.tags;
@@ -29,16 +29,14 @@ export class ContentComponent {
 
   fetchArticles() {
     this.http.get<Article[]>('http://localhost:3004/articles')
-    .subscribe((articles: any) => {
-      this.articles = articles; 
-      this.SortedArticlesByViews();
+    .subscribe((articles: Article[]) => {
+      this.articles.set(articles); 
+      this.sortArticlesByViews();
     });
   }
 
-  SortedArticlesByViews(): any {
-    this.articles = this.articles.sort((a, b) => {
-      return b.views - a.views;
-    });
+  sortArticlesByViews(): void {    
+    this.articles.update(articles => articles.sort((a, b) => b.views - a.views));
   }
 }
   
