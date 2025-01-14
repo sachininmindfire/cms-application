@@ -9,22 +9,43 @@ import { ContentServiceService } from '../content-service.service';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { CommonModule } from '@angular/common';
+import { Article } from './article';
+import {MatListModule} from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import {NgxWigModule} from 'ngx-wig';
 
 @Component({
   selector: 'app-article',
   providers: [provideNativeDateAdapter()],
-  imports: [MatChipsModule, MatFormFieldModule, MatInputModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, CommonModule],
+  imports: [NgxWigModule, MatListModule, MatIcon, MatChipsModule, MatFormFieldModule, MatInputModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, CommonModule],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'
 })
 export class ArticleComponent {
   articleId: number = 0;
-  article: any;
+  article: Article = { id: 0, title: '', description: '', author: '', date: new Date(), views: 0, likes: 0, comments: [] };
   submitAction: string = 'Save';
+  articleFormGroup;
   
-  constructor(private route: ActivatedRoute, private contentServiceService: ContentServiceService, private router: Router) {
+  constructor(private route: ActivatedRoute, private contentServiceService: ContentServiceService, private router: Router, private fb: FormBuilder) {
     this.route.params.subscribe(params => {
       this.articleId = params['id'] ?? 0;
+    });
+    this.articleFormGroup = this.fb.group({
+      id: [this.article.id],
+      title: [this.article.title],
+      description: [this.article.description],
+      author: [this.article.author],
+      date: [this.article.date],
+      views: [this.article.views],
+      likes: [this.article.likes],
+      comments: this.fb.array(this.article.comments.map(comment => this.fb.group({
+        id: [comment.id],
+        articleId: [comment.articleId],
+        comment: [comment.comment],
+        date: [comment.date],
+        isActive: [comment.isActive]
+      })))
     });
   }
   
@@ -45,25 +66,17 @@ export class ArticleComponent {
   protected onInput(event: Event) {
     this.value.set((event.target as HTMLInputElement).value);
   }
-
-  articleFormGroup = new FormBuilder().group({
-    id: 0,
-    title: '',
-    description: '',    
-    author: '',
-    date: '',
-    views: '',
-    likes: '',
-    comments: ''
-  });
-
+  
   onSubmit() {
     console.log(this.articleFormGroup.value);
     if(this.articleId === 0)
     {
       this.articleFormGroup.value.id = this.contentServiceService.articles.length + 1;
       this.contentServiceService.addArticle(this.articleFormGroup.value);
-      this.router.navigate(['/content/article', this.articleFormGroup.value.id]);
+      if (this.submitAction === 'saveAndClose')     
+        this.router.navigate(['/content']);    
+      else
+        this.router.navigate(['/content/article', this.articleFormGroup.value.id]);   
     }
     else
     { 
@@ -87,5 +100,7 @@ export class ArticleComponent {
   SetSubmitAction(action: string) {
     this.submitAction = action;
   }
-
+  showInfo() {
+    alert('This is a sample article');
+  }
 }

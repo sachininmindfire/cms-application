@@ -1,3 +1,4 @@
+<!-- <link href="https://cdn.materialdesignicons.com/2.1.19/css/materialdesignicons.min.css" rel="stylesheet" /> -->
 <div class="article-container p-4">
     <div class="mb-6">
       <h1 class="text-2xl">Article <strong> {{articleFormGroup.value.title}}</strong></h1>
@@ -14,10 +15,13 @@
             </div>
             <div class="grid grid-cols-1 gap-4 grid-flow-row">
                 <div>
-                    <mat-form-field class="w-full">
-                        <mat-label>Article description</mat-label>
-                        <textarea matInput formControlName="description" placeholder="Ex. AI evolution in 2024"></textarea>
-                    </mat-form-field>
+                    <mat-label>Article description</mat-label>
+                    <!-- <mat-form-field class="w-full"> -->
+                        <!-- <mat-label>Article description</mat-label> -->
+                        <!-- <textarea matInput formControlName="description" placeholder="Ex. AI evolution in 2024"></textarea> -->
+                        <ngx-wig formControlName="description" placeholder="Ex. Description of AI evolution in 2024"></ngx-wig>
+                        <mat-hint align="end">{{value().length}}/100</mat-hint>
+                    <!-- </mat-form-field> -->
                 </div>                
             <!-- <mat-form-field>
                 <mat-label>Select me</mat-label>
@@ -59,34 +63,45 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="grid grid-cols-1 gap-4 grid-flow-row">
-                <div>
-                    <mat-form-field class="w-full">
-                        <mat-label>Article comment</mat-label>
-                        <textarea matInput formControlName="comments" readonly></textarea>
-                    </mat-form-field>
-                </div>
-                
+        </div>
+        <div class="grid grid-cols-1 gap-4 grid-flow-row">
+            <div>                                        
+                <mat-chip-set aria-label="Article actions">
+                    <mat-chip>
+                        <button mat-button type="button" color="secondary" (click)="OnGoToContentPage()" >Go to Content page</button>
+                    </mat-chip>
+                    <mat-chip [disabled]="articleFormGroup.dirty? false: true">
+                        <button mat-button type="submit" color="primary" (click)="SetSubmitAction('save')" >Save</button>
+                    </mat-chip>                        
+                    <mat-chip [disabled]="articleFormGroup.dirty? false: true">
+                        <button #saveAndCloseButton mat-button type="submit" color="primary" (click)="SetSubmitAction('saveAndClose')">Save and Close</button>
+                    </mat-chip>
+                    <mat-chip [disabled]="articleFormGroup.dirty? false: true">
+                        <button #saveButton mat-button type="button" color="secondary" (click)="OnCancel()" >Cancel</button>
+                    </mat-chip>
+                </mat-chip-set>
             </div>
-            <div class="grid grid-cols-1 gap-4 grid-flow-row">
-                <div>                                        
-                    <mat-chip-set aria-label="Article actions">
-                        <mat-chip>
-                            <button mat-button type="button" color="secondary" (click)="OnGoToContentPage()" >Go to Content page</button>
-                        </mat-chip>
-                        <mat-chip [disabled]="articleFormGroup.dirty? false: true">
-                            <button mat-button type="submit" color="primary" (click)="SetSubmitAction('save')" >Save</button>
-                        </mat-chip>                        
-                        <mat-chip [disabled]="articleFormGroup.dirty? false: true">
-                            <button #saveAndCloseButton mat-button type="submit" color="primary" (click)="SetSubmitAction('saveAndClose')">Save and Close</button>
-                        </mat-chip>
-                        <mat-chip [disabled]="articleFormGroup.dirty? false: true">
-                            <button #saveButton mat-button type="button" color="secondary" (click)="OnCancel()" >Cancel</button>
-                        </mat-chip>
-                    </mat-chip-set>
-                </div>
+        </div>
+        
+        </form>
+        <div class="grid grid-cols-1 gap-4 grid-flow-row">
+            <div>
+                {{articleFormGroup.value.comments}}
+                <mat-nav-list class="w-full">
+                    <mat-list-item *ngFor="let link of articleFormGroup.value.comments" [activated]="link.isActive ?? false">
+                         <a matListItemTitle href="...">{{ link }}</a>
+                         <button mat-icon-button (click)="showInfo()" matListItemMeta>
+                            <mat-icon>info</mat-icon>
+                         </button>
+                    </mat-list-item>
+                </mat-nav-list>
+                <!-- <mat-form-field class="w-full">
+                    <mat-label>Article comment</mat-label>
+                    <textarea matInput formControlName="comments" readonly></textarea>
+                </mat-form-field> -->
             </div>
-      </div>
-    </form>      
+            
+        
+         
 </div>
 
