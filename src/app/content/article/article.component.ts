@@ -57,11 +57,14 @@ export class ArticleComponent {
   }
 
   FetchAndLoadArticleInForm() {
-    this.article = this.contentServiceService.getArticles(this.articleId);    
-    this.articleFormGroup.patchValue(this.article);
-    this.articleFormGroup.markAsPristine();
-    this.titleSignal.set(this.article.title);
-    this.descriptionSignal.set(this.article.description);
+    this.contentServiceService.getArticle(this.articleId).subscribe(article => {
+      this.article = article;      
+      this.articleFormGroup.patchValue(this.article);
+      this.articleFormGroup.markAsPristine();
+      this.titleSignal.set(this.article.title);
+      this.descriptionSignal.set(this.article.description);
+    });    
+    
   }  
 
   protected onInput(event: Event) {
