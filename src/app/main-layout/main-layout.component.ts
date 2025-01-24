@@ -19,7 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatIconModule,
     MatButtonModule,
     MatToolbarModule
-  ],
+],
   template: `
     <mat-sidenav-container class="sidenav-container">
       <mat-sidenav #sidenav mode="side" opened class="sidenav"
@@ -41,6 +41,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
             <mat-icon>settings</mat-icon>
             <span *ngIf="!isCollapsed">Settings</span>
           </a>
+         
         </mat-nav-list>
 
         <button mat-icon-button class="toggle-button" (click)="toggleSidenav()">

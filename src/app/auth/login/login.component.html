@@ -1,0 +1,31 @@
+<!-- <p><button (click)="login()">Login and Set Token in LocalStorage</button></p> -->
+<div class="flex min-h-screen items-center justify-center">
+    <div class="w-full max-w-md p-6">
+      <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <mat-form-field class="w-full">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" type="text">
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+            Username is required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field class="w-full">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" type="password">
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+            Password must be at least 6 characters
+          </mat-error>
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" type="submit" class="w-full">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>

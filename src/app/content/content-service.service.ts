@@ -1,14 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { ContentSampleData } from './content-sample-data';
 import { Article } from './article/article';
-import { first, firstValueFrom, map, Observable, take } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { catchError, first, firstValueFrom, map, Observable, take, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Environment } from '../../environments/environment.dev';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContentServiceService {
   private http = inject(HttpClient);
+
+  baseUrl = Environment.ContentApiUrl;
   
   articles: Article[] = [];
   tips: any;
@@ -17,46 +20,51 @@ export class ContentServiceService {
     this.tips = ContentSampleData.tips;
   }
   getArticles(sortBy: string='views'): Observable<Article[]> {
-    var articles$ = this.http.get<Article[]>('http://localhost:3004/articles');
+    var articles$ = this.http.get<Article[]>(this.baseUrl + '/articles');
     return articles$.pipe(
       map((articles: Article[]) => articles.sort((a: any, b: any) => b[sortBy as keyof Article] - a[sortBy as keyof Article])),
       take(10)
     )    
   }
   getArticle(id: number): Observable<Article> {
-    return this.http.get<Article[]>(`http://localhost:3004/articles?id=${id}`).pipe(
+    return this.http.get<Article>(`${this.baseUrl}/articles/${id}`).pipe(
       first(),
-      map(articles => {
-        const article = articles[0];
+      map(article => {                
         return {
           ...article,
-          date: new Date(article.date),
+          date: article.date ? new Date(article.date) : new Date(),
           comments: article.comments?.map(comment => ({
             ...comment,
-            date: new Date(comment.date)
-          }))
+            date: comment.date ? new Date(comment.date) : new Date()
+          })) ?? []
         };
-      })
+      }),
+      catchError(this.handleError)
     );
   }
+
+ handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An error occurred';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
+  }
+
   addArticle(article: any) {
-    this.articles.push(article);
-    console.log('Article added successfully');
+    this.http.post(this.baseUrl + '/articles', article).subscribe(() => {
+      console.log('Article added successfully');
+    });
   }
   updateArticle(article: any) {
-    var art = this.articles.find((a: any) => a.id == article.id);
-    if (art) {
-      art.title = article.title;
-      art.description = article.description;
-      art.author = article.author;
-      art.date = article.date;
-      art.views = article.views;
-      art.likes = article.likes;
-      art.comments = article.comments;
+    this.http.put(this.baseUrl + '/articles/' + article.id, article).subscribe(() => {
       console.log('Article updated successfully');
-    } else {
-      console.log('Article not found');
-    }
+    });    
   }
   deleteArticle() {
     console.log('Article deleted successfully');

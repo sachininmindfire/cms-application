@@ -15,7 +15,7 @@ export interface Comment
 {
     id: number;
     articleId: number;
-    comment: string;
+    commentText: string;
     date: Date;
     isActive: boolean;
 }

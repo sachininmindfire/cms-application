@@ -17,7 +17,7 @@ import {NgxWigModule} from 'ngx-wig';
 @Component({
   selector: 'app-article',
   providers: [provideNativeDateAdapter()],
-  imports: [NgxWigModule, MatListModule, MatIcon, MatChipsModule, MatFormFieldModule, MatInputModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, CommonModule],
+  imports: [NgxWigModule, MatListModule, MatChipsModule, MatFormFieldModule, MatInputModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, CommonModule],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'
 })
@@ -44,7 +44,7 @@ export class ArticleComponent {
       comments: this.fb.array(this.article.comments.map(comment => this.fb.group({
         id: [comment.id],
         articleId: [comment.articleId],
-        comment: [comment.comment],
+        comment: [comment.commentText],
         date: [comment.date],
         isActive: [comment.isActive]
       })))
@@ -57,14 +57,24 @@ export class ArticleComponent {
   }
 
   FetchAndLoadArticleInForm() {
-    this.contentServiceService.getArticle(this.articleId).subscribe(article => {
-      this.article = article;      
-      this.articleFormGroup.patchValue(this.article);
-      this.articleFormGroup.markAsPristine();
-      this.titleSignal.set(this.article.title);
-      this.descriptionSignal.set(this.article.description);
-    });    
-    
+    this.contentServiceService.getArticle(this.articleId).subscribe({
+      next: (article) => {
+        this.article = {
+          ...article,
+          comments: article.comments?.map(comment => ({
+            ...comment,
+            date: new Date(comment.date)
+          })) ?? []
+        };
+        this.articleFormGroup.patchValue(this.article);
+        this.articleFormGroup.markAsPristine();
+        this.titleSignal.set(this.article.title);
+        this.descriptionSignal.set(this.article.description);
+      },
+      error: (error) => {
+        console.error('Error fetching article:', error);
+      }
+    });  
   }  
 
   protected onInput(event: Event) {
