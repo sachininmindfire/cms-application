@@ -22,14 +22,21 @@
             </mat-card>
             <div class="">
                 <div class="mb-2 text-left">Top 10 Articles (By Views)</div>
-                <mat-card *ngFor="let article of articles$ | async" class="mb-2">                    
-                    <mat-card-content>
-                        <div class="flex justify-between items-center">
-                            <div class="text-sm"><a class="underline" [routerLink]="['/content/article', article.id]">{{article.title}}</a></div>
-                            <div class="text-sm font-bold">{{article.views}}</div>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
+                <ng-container *ngIf="isArticleLoading; else articlesList">
+                    <div class="flex justify-center p-4">
+                        <mat-spinner diameter="40"></mat-spinner>
+                    </div>
+                </ng-container>
+                <ng-template #articlesList>
+                    <mat-card *ngFor="let article of articles$ | async" class="mb-2">                    
+                        <mat-card-content>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm"><a class="underline" [routerLink]="['/content/article', article.id]">{{article.title}}</a></div>
+                                <div class="text-sm font-bold">{{article.views}}</div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </ng-template>
             </div>
             <div class="">
                 <div class="mb-2 text-left">Top 10 Tips</div>

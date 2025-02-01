@@ -1,6 +1,5 @@
 // src/app/dashboard/dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -79,11 +78,8 @@ export class DashboardComponent implements OnInit {
       status: "warning"
     }
   ];
-  constructor(private router: Router) { }
+  
 
   ngOnInit(): void { }
 
-  onLogin() {   
-    this.router.navigate(['/login']);
-  }
 }
