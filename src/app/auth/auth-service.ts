@@ -2,14 +2,14 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { AuthState, LoginRequest, LoginResponse, User } from './interfaces/auth-interfaces';
-import { Environment } from '../../environments/environment.dev';
+import { Environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly AUTH_KEY = 'token';
-  private readonly apiUrl = Environment.AuthApiUrl;
+  private readonly apiUrl = Environment.authApiUrl;
   
   private authState = signal<AuthState>({
     user: null,

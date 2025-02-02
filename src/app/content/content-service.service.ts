@@ -3,7 +3,7 @@ import { ContentSampleData } from './content-sample-data';
 import { Article } from './article/article';
 import { catchError, first, firstValueFrom, map, Observable, take, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Environment } from '../../environments/environment.dev';
+import { Environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ import { Environment } from '../../environments/environment.dev';
 export class ContentServiceService {
   private http = inject(HttpClient);
 
-  baseUrl = Environment.ContentApiUrl;
+  baseUrl = Environment.contentApiUrl;
   
   articles: Article[] = [];
   tips: any;
