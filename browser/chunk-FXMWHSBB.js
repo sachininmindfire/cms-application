@@ -1,0 +1,1 @@
+import{Ib as o,Jb as p,dc as i,nb as n}from"./chunk-OC6G6XUH.js";var a=class t{static \u0275fac=function(e){return new(e||t)};static \u0275cmp=n({type:t,selectors:[["app-tip"]],decls:2,vars:0,template:function(e,m){e&1&&(o(0,"p"),i(1,"tip works!"),p())},encapsulation:2})};export{a as TipComponent};
