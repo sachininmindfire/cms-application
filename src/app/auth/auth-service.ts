@@ -21,6 +21,10 @@ export class AuthService {
     this.initializeAuthState();
   }
 
+  getToken(): string | null {
+    return localStorage.getItem(this.AUTH_KEY);
+  }
+
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login?audience=CMS.Service`, credentials).pipe(
       tap(response => {

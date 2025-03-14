@@ -2,16 +2,20 @@ import { inject, Injectable } from '@angular/core';
 import { ContentSampleData } from './content-sample-data';
 import { Article } from './article/article';
 import { catchError, first, firstValueFrom, map, Observable, take, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Environment } from '../../environments/environment';
+import { AuthService } from '../auth/auth-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContentServiceService {
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
 
   baseUrl = Environment.contentApiUrl;
+  private articlsApiUrl = 'http://localhost:5098/api/articles';
+
   
   articles: Article[] = [];
   tips: any;
@@ -19,12 +23,51 @@ export class ContentServiceService {
     console.log('Content Service Initialized');    
     this.tips = ContentSampleData.tips;
   }
-  getArticles(sortBy: string='views'): Observable<Article[]> {
-    var articles$ = this.http.get<Article[]>(this.baseUrl + '/articles');
-    return articles$.pipe(
-      map((articles: Article[]) => articles.sort((a: any, b: any) => b[sortBy as keyof Article] - a[sortBy as keyof Article])),
-      take(10)
-    )    
+
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
+  }
+  
+  getAllArticles(): Observable<Article[]> {
+    console.log('Making API call to:', this.articlsApiUrl);
+
+    return this.http.get<Article[]>(this.articlsApiUrl).pipe(
+      map((articles: Article[]) => {
+        console.log('Received articles:', articles);
+        return articles;
+      }),
+      catchError(error => {
+        console.error('Error fetching articles:', error);
+        return throwError(() => new Error(`Error loading articles: ${error.message}`));
+      })
+    );
+  }
+
+  getArticles(sortBy: string = 'views'): Observable<Article[]> {
+    const articleUrl =  `${this.baseUrl}/articles`;
+    const headers = this.getHeaders();
+
+    console.log('BaseURL:', this.baseUrl);
+    console.log('Full URL:', articleUrl);
+    console.log('Token:', this.authService.getToken());
+    console.log('Headers:', headers);
+
+    return this.http.get<Article[]>(articleUrl, { headers }).pipe(
+      map((articles: Article[]) => {
+        console.log('Received articles:', articles);
+        return articles.sort((a: any, b: any) => 
+          b[sortBy as keyof Article] - a[sortBy as keyof Article]
+        );
+      }),
+      take(10),
+      catchError(error => {
+        console.error('Error fetching articles:', error);
+        return throwError(() => error);
+      })
+    );
   }
   getArticle(id: number): Observable<Article> {
     return this.http.get<Article>(`${this.baseUrl}/articles/${id}`).pipe(

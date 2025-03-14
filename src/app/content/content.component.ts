@@ -31,8 +31,27 @@ export class ContentComponent implements OnInit  {
   isArticleLoading = true;
 
   ngOnInit() {  
-    this.articles$ = this.contentService.getArticles('likes').pipe(
-      tap(() => this.isArticleLoading = false)
-    );
+    // this.articles$ = this.contentService.getArticles('likes').pipe(
+    //   tap(() => this.isArticleLoading = false)
+    // );
+
+    this.loadAllArticles();
+  }
+
+  articles: Article[] = [];
+
+  loadAllArticles() {
+    // this.articles$ = this.contentService.getAllArticles().pipe(
+    //   tap(() => this.isArticleLoading = false)
+    // );
+
+    this.contentService.getAllArticles().subscribe({
+      next: (articles) => {
+        this.articles = articles;
+        console.log('Articles loaded successfully:', articles);
+        this.isArticleLoading = false;
+      },
+      error: (error) => console.error('Error loading articles:', error)
+    });
   }
 }
